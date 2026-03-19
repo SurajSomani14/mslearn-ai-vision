@@ -13,9 +13,9 @@ Sora is an AI model from OpenAI that creates realistic and imaginative video sce
 
 In this exercise, you'll explore how to deploy the Sora model and generate video content using the Microsoft Foundry portal. You'll also build an application that generates videos from images, polls for completion status, and remixes existing videos.
 
-This exercise will take approximately **45** minutes.
+> **Note**: To complete this exercise, you need an Azure subscription that has access to a video generation model, such as ***Sora 2***. Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors. Video generation can take 1 to 5 minutes to complete depending on your settings.
 
-> **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors. Video generation can take 1 to 5 minutes to complete depending on your settings.
+This exercise will take approximately **45** minutes.
 
 ## Understand responsible AI considerations
 
@@ -32,45 +32,48 @@ Azure provides input and output moderation across all image generation models, a
 
 ## Prerequisites
 
-To complete this exercise, you need:
+Before starting this exercise, ensure you have:
 
-- An [Azure subscription](https://azure.microsoft.com/free/) with permissions to create AI resources.
-- Access to the Sora model in Azure OpenAI (available in supported regions).
-- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine.
-- [Python 3.13](https://www.python.org/downloads/) or later installed on your local machine.
-- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed on your local machine.
+- An active [Azure subscription](https://azure.microsoft.com/pricing/purchase-options/azure-account)
+- [Visual Studio Code](https://code.visualstudio.com/) installed
+- [Python version 3.13 or higher](https://www.python.org/downloads/) installed
+- [Git](https://git-scm.com/install/) installed and configured
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) installed
 
-## Deploy the Sora model in a Foundry project
+## Create a Microsoft Foundry project
 
-Let's start by creating a project and deploying the Sora video generation model.
+Microsoft Foundry uses projects to organize models, resources, data, and other assets used to develop an AI solution.
 
-1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials.
+1. In a web browser, open the [Microsoft Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the Foundry logo at the top left to navigate to the home page.
 
-1. Ensure the **New Foundry** toggle is set to *On*.
+1. If it is not already enabled, in the tool bar the top of the page, enable the **New Foundry** option. Then, if prompted, create a new project with a unique name; expanding the **Advanced options** area to specify the following settings for your project:
+    - **Foundry resource**: *Use the default name for your resource (usually {project_name}-resource)*
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Create or select a resource group*
+    - **Region**: Select any available region
 
-1. You may be prompted to create a new project before continuing to the New Foundry experience. Select **Create a new project**.
+1. Select **Create**. Wait for your project to be created.
+1. On the home page for your project, note the project endpoint, key, and OpenAI endpoint.
 
-    ![Screenshot of the Create project pane](../media/foundry-new-project.png)
+    > **TIP**: You're going to need the Azure OpenAI endpoint later!
 
-    If you're not prompted, select the projects drop down menu on the upper left, and then select **Create new project**.
+## Deploy a model
 
-1. Enter a name for your Foundry project in the textbox and select **Create**.
+You'll need a model that can process image-based input.
 
-    Wait a few moments for the project to be created. The new Foundry portal home page should appear with your project selected.
+1. On the project home page, in the **Start building** menu, select **Browse models** to view the Microsoft Foundry model catalog.
 
-1. On the Foundry portal home page, select **Build** from the toolbar menu.
+1. Search for and deploy the `Sora-2` model using the default settings. Deployment may take a minute or so.
 
-1. On the left-hand menu, select **Models**.
+    > **Note**: Access to video-generation models is restricted - you may need to register your subscription for the Sora-2 model to be availalable.
 
-1. Select **Deploy a base model** and then choose the **Sora-2** video generation model from the list.
+1. When the model has been deployed, view the model playground page that is opened, in which you can chat with the model.
 
-1. Select **Deploy** and choose the default settings.
+    > **TIP**: Note the model deployment name (which by default should be *Sora-2*) - you'll need this later!
 
-    The deployment process may take a few minutes. Once the deployment is complete, the model playground will open.
+## Test the model in the playground
 
-## Generate a video from a text prompt
-
-Now let's use the playground to generate your first AI-powered video.
+Now you can test your vide-generation model deployment in the chat playground.
 
 1. In the playground, enter the following prompt into the text box:
 
@@ -96,48 +99,49 @@ Now let's use the playground to generate your first AI-powered video.
 
 Now that you've explored the playground, let's build a Python application that programmatically generates videos using the Sora 2 API.
 
+### Get application files from GitHub
+
+The initial application files you'll need to develop the translation application are provided in a GitHub repo.
+
+1. Open Visual Studio Code.
+1. Open the command palette (*Ctrl+Shift+P*) and use the `Git:clone` command to clone the `https://github.com/microsoftlearning/mslearn-ai-vision` repo to a local folder (it doesn't matter which one). Then open it.
+
+    You may be prompted to confirm you trust the authors.
+
+1. In Visual Studio Code, view the **Extensions** pane; and if it is not already installed, install the **Python** extension.
+1. In the **Command Palette**, use the command `python:select interpreter`. Then select an existing environment if you have one, or create a new **Venv** environment based on your Python 3.1x installation.
+
+    > **Tip**: If you are prompted to install dependencies, you can install the ones in the *requirements.txt* file in the */labfiles/video-generation/python* folder; but it's OK if you don't - we'll install them later!
+
+    > **Tip**: If you prefer to use the terminal, you can create your **Venv** environment with `python -m venv labenv`, then activate it with `\labenv\Scripts\activate`.
+
 ### Prepare the application configuration
 
-1. Open **Visual Studio Code** on your local computer. If you don't have it installed, download it from [https://code.visualstudio.com](https://code.visualstudio.com).
-
-1. Open a terminal in VS Code (**Terminal > New Terminal**) and clone the GitHub repo containing the code files for this exercise:
-
-    ```
-    git clone https://github.com/microsoftlearning/mslearn-ai-vision mslearn-ai-vision
-    ```
-
-1. After the repo has been cloned, open the folder in VS Code (**File > Open Folder**), and navigate to the `mslearn-ai-vision/labfiles/video-generation/python` folder.
+1. After the repo has been cloned, open the folder in VS Code (**File > Open Folder**), and navigate to the `/labfiles/video-generation/python` folder.
 
 1. In the VS Code Explorer pane, review the files in the folder:
 
     - `.env` - A configuration file for application settings.
     - `video-app.py` - The Python code file for the video application.
     - `requirements.txt` - A file listing the package dependencies.
+    - `reference.png` - An image file that you can use as a reference for video generation.
 
-1. Open a terminal in VS Code and navigate to the project folder, then install the required libraries:
+1. In the **Explorer** pane, in the **python** folder, select the **.env** file to open it. Then update the configuration values to include the **Azure OpenAI endpoint** for your Foundry resource, and the model deployment name for your video-generation model.
 
-    ```
-    cd mslearn-ai-vision/labfiles/video-generation/python
-    python -m venv labenv
-    ```
+    > **Important**:Be sure to add the `https://{foundry-resource-name}.openai.azure.com/openai/v1/` Azure openAI endpoint, <u>not</u> the project endpoint!
 
-1. Activate the virtual environment:
+    Save the modified configuration file.
 
-    ```
-    labenv\Scripts\activate
-    ```
+1. In the **Explorer** pane, right-click the **python** folder containing the application files, and select **Open in integrated terminal** (or open a terminal in the **Terminal** menu and navigate to the */labfiles/video-generation/python* folder.)
 
-1. Install the required packages:
+    > **Note**: Opening the terminal in Visual Studio Code will automatically activate the Python environment. You may need to enable running scripts on your system.
+
+1. Ensure that the terminal is open in the **/labfiles/video-generation/python*** folder with the prefix **(.venv)** to indicate that the Python environment you created is active.
+1. Install the required Python packages by running the following command:
 
     ```
     pip install -r requirements.txt
     ```
-
-1. In VS Code, open the `.env` file and replace the placeholders:
-    - Replace **YOUR-RESOURCE-NAME** with the name of your Foundry resource where you deployed the Sora model (for example, `foundry-project-resource`).
-    - Replace the **MODEL_DEPLOYMENT** value with the name of your model deployment (for example, `sora-2`).
-
-1. Save the `.env` file.
 
 ### Write code to generate videos from an image reference
 

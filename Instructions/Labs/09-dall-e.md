@@ -1,10 +1,13 @@
 ---
 lab:
-    title: 'Generate images with AI'
+    title: 'Generate images with AI (deprecated)'
     description: 'Use an image generation model in Azure AI Foundry to generate images.'
+    islab: false
 ---
 
-# Generate images with AI
+# Generate images with AI (deprecated)
+
+> **Note**: This exercise is deprecated. Consider reviewing the replacement exercise at <https://microsoftlearning.github.io/mslearn-ai-vision/Instructions/Exercises/02-generate-image.html>.
 
 In this exercise, you use an image generation model to generate images. You also use the OpenAI Python SDK to create a simple app to generate images based on your prompts.
 
@@ -40,10 +43,10 @@ An Azure AI *project* provides a collaborative workspace for AI development. Let
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
 
 1. Select **Customize** and specify the following settings for your hub:
-    - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
-    - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any **AI Foundry recommended***\*
+    * **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
+    * **Subscription**: *Your Azure subscription*
+    * **Resource group**: *Create or select a resource group*
+    * **Region**: *Select any **AI Foundry recommended***\*
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
@@ -67,11 +70,11 @@ Before creating a client application, let's test the Flux model in the playgroun
 
 1. Enter a follow-up prompt, such as `Show the robot in a restaurant` and review the resulting image.
 
-1. Continue testing with new prompts to refine the image until you are happy with it. 
+1. Continue testing with new prompts to refine the image until you are happy with it.
 
 1. Select the **\</\> View Code** button and ensure you are on the **Entra ID authentication** tab. Then record the following information for use later in the exercise. Note the values are examples, be sure to record the information from your deployment.
 
-    * OpenAI Endpoint: *https://flux-resource.cognitiveservices.azure.com/*
+    * OpenAI Endpoint: *<https://flux-resource.cognitiveservices.azure.com/>*
     * Deployment name (model name): *FLUX.2-pro*
 
 ## Create a client application

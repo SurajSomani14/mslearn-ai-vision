@@ -63,7 +63,7 @@ You'll need a model that can process image-based input.
 
 ## Test the model in the playground
 
-Now you can test your multimodal model deployment with an image-based prompt in the chat playground.
+Now you can test your model deployment with an image-based prompt in the chat playground.
 
 1. In a new browser tab, download [mango.jpeg](https://microsoftlearning.github.io/mslearn-ai-vision/Labfiles/gen-ai-vision/mango.jpeg) from `https://microsoftlearning.github.io/mslearn-ai-vision/Labfiles/gen-ai-vision/mango.jpeg` and save it to a folder on your local file system.
 
