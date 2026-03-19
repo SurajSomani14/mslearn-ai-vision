@@ -20,8 +20,6 @@ While this exercise is based on the OpenAI Python SDK, you can develop AI chat a
 
 This exercise takes approximately **30** minutes.
 
-This exercise takes approximately **30** minutes.
-
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
