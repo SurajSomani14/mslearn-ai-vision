@@ -45,13 +45,32 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
     Creating a Foundry project also creates a Foundry resource group in Azure that is linked to your project. This resource group will connect to the Azure Content Understanding service and any other AI services you choose to deploy for use in your Foundry project.
 
-## Deploy required models for Content Understanding
+## Create an Azure storage account
+
+You'll need an Azure storage account for the content assets you're going to analyze using Azure Content Understanding.
+
+1. In a new browser tab, open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` and browse to the resource group where you created your Foundry project resource.
+
+    The resource group should contain your Foundry resource and the project you created.
+
+1. Create a new **Storage account** resource in the resource group, with the following settings:
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *The resource group containing your Foundry resource*
+    - **Storage account name**: *A unique name for your storage account*
+    - **Region**: *The same region as your Foundry resource*
+    - **Preferred storage type**: Azure Blob Storage or Azure Data Lake Storage Gen 2
+    - **Performance**: Standard
+    - **Redundancy**: Locally-redundant storage (LRS)
+1. Wait for your storage account to be created.
+
+## Create an image analyzer in Azure Content Understanding
 
 Now that you have a Foundry project, you can deploy the AI models needed for content understanding.
 
-1. Navigate to the [Content Understanding settings page](https://contentunderstanding.ai.azure.com/settings) at `https://contentunderstanding.ai.azure.com/settings`.
+1. In a new browser tab, navigate to [Content Understanding Studio](https://contentunderstanding.ai.azure.com/home) at `https://contentunderstanding.ai.azure.com/home` and sign in using your Azure credentials if prompted.
+1. At the top right, select the **Settings** icon to view your account settings for Azure Content Understanding.
 
-1. Select the **Add resource** button.
+1. On the **Setup Azure resource** page, select the **Add resource** button.
 
 1. Select your subscription and the Foundry resources that match your Foundry project name.
 
@@ -60,6 +79,18 @@ Now that you have a Foundry project, you can deploy the AI models needed for con
 1. Select **Next**, then select **Save** to deploy the required models.
 
     The deployment process can take several minutes. Once the models are deployed, the resource will appear under **Connected Azure AI Foundry Resources**. Note the name of the resource.
+
+1. On the menu bar, select **Build**. Then use the **Create** button to create a new Content Understanding project with the following settings.
+    - **Project name**: *A unique name for your image analysis project*
+    - **Description**: Image analysis project
+    - **Type of project**: Extract content and field with custom schema
+    - **Advanced settings**: Ensure your Foundry resource and storage account are selected, a new container will be created, and a chat completion model such as gpt-4.1 is selected.
+1. When the project has been created, in a new browser tab, download the [lion.jpg](https://microsoftlearning.github.io/mslearn-ai-vision/Labfiles/content-understanding/lion.jpg) image from `https://microsoftlearning.github.io/mslearn-ai-vision/Labfiles/content-understanding/lion.jpg` and save it in a local folder.
+
+    Then return to the Content Understanding project, and upload the **lion.jpg** file to the project.
+
+1.
+1.
 
 ## Try a pre-built image analyzer in the Content Understanding Studio
 
