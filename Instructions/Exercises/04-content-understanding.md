@@ -4,6 +4,7 @@ lab:
     description: 'Learn how to use Azure Content Understanding to analyze images and generate descriptive metadata.'
     level: 300
     duration: 30
+    islab: true
 ---
 
 # Analyze images with Azure Content Understanding
@@ -27,25 +28,22 @@ To complete this exercise, you need:
 - [Python 3.13](https://www.python.org/downloads/) or later installed on your local machine.
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed on your local machine.
 
-## Create a Foundry resource
+## Create a Microsoft Foundry project
 
-Let's start by creating a Foundry resource.
+Microsoft Foundry uses projects to organize models, resources, data, and other assets used to develop an AI solution.
 
-1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials.
+1. In a web browser, open the [Microsoft Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the Foundry logo at the top left to navigate to the home page.
 
-1. Ensure the **New Foundry** toggle is set to *On*.
+1. If it is not already enabled, in the tool bar the top of the page, enable the **New Foundry** option. Then, if prompted, create a new project with a unique name; expanding the **Advanced options** area to specify the following settings for your project:
+    - **Foundry resource**: *Use the default name for your resource (usually {project_name}-resource)*
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Create or select a resource group*
+    - **Region**: Select any available region
 
-1. You may be prompted to create a new project before continuing to the New Foundry experience. Select **Create a new project**.
+1. Select **Create**. Wait for your project to be created.
+1. On the home page for your project, view the project details.
 
-    <img src="../media/foundry-new-project.png" alt="Screenshot of the Create project pane." width="600">
-
-    If you're not prompted, select the projects drop down menu on the upper left, and then select **Create new project**.
-
-1. Enter a name for your Foundry project in the textbox and select **Create**.
-
-    Wait a few moments for the project to be created. The new Foundry portal home page should appear with your project selected.
-
-Creating a Foundry project also creates a Foundry resource group in Azure that is linked to your project. This resource group will connect to the Azure Content Understanding service and any other AI services you choose to deploy for use in your Foundry project.
+    Creating a Foundry project also creates a Foundry resource group in Azure that is linked to your project. This resource group will connect to the Azure Content Understanding service and any other AI services you choose to deploy for use in your Foundry project.
 
 ## Deploy required models for Content Understanding
 
@@ -55,9 +53,9 @@ Now that you have a Foundry project, you can deploy the AI models needed for con
 
 1. Select the **Add resource** button.
 
-1. Select your subscription and the Foundry resources that match your Foundry project name. 
+1. Select your subscription and the Foundry resources that match your Foundry project name.
 
-1. Check the box for **Enable auto-deployment for required models if no default deployment available**. 
+1. Check the box for **Enable auto-deployment for required models if no default deployment available**.
 
 1. Select **Next**, then select **Save** to deploy the required models.
 
@@ -83,46 +81,49 @@ Now that you have a Foundry project, you can deploy the AI models needed for con
 
 Now that you've explored the playground, let's build a Python application that programmatically analyzes images using the Content Understanding analyzers.
 
+### Get application files from GitHub
+
+The initial application files you'll need to develop the translation application are provided in a GitHub repo.
+
+1. Open Visual Studio Code.
+1. Open the command palette (*Ctrl+Shift+P*) and use the `Git:clone` command to clone the `https://github.com/microsoftlearning/mslearn-ai-vision` repo to a local folder (it doesn't matter which one). Then open it.
+
+    You may be prompted to confirm you trust the authors.
+
+1. In Visual Studio Code, view the **Extensions** pane; and if it is not already installed, install the **Python** extension.
+1. In the **Command Palette**, use the command `python:select interpreter`. Then select an existing environment if you have one, or create a new **Venv** environment based on your Python 3.1x installation.
+
+    > **Tip**: If you are prompted to install dependencies, you can install the ones in the *requirements.txt* file in the */labfiles/content-understanding/python* folder; but it's OK if you don't - we'll install them later!
+
+    > **Tip**: If you prefer to use the terminal, you can create your **Venv** environment with `python -m venv labenv`, then activate it with `\labenv\Scripts\activate`.
+
 ### Prepare the application configuration
 
-1. Open **Visual Studio Code** on your local computer. If you don't have it installed, download it from [https://code.visualstudio.com](https://code.visualstudio.com).
-
-1. Open a terminal in VS Code (**Terminal > New Terminal**) and clone the GitHub repo containing the code files for this exercise:
-
-    ```
-    git clone https://github.com/microsoftlearning/mslearn-ai-vision mslearn-ai-vision
-    ```
-
-1. After the repo has been cloned, open the folder in VS Code (**File > Open Folder**), and navigate to the `mslearn-ai-vision/labfiles/content-understanding/python` folder.
+1. After the repo has been cloned, open the folder in VS Code (**File > Open Folder**), and navigate to the `/labfiles/content-understanding/python` folder.
 
 1. In the VS Code Explorer pane, review the files in the folder:
 
     - `.env` - A configuration file for application settings.
     - `image-app.py` - The Python code file for the image analyzer application.
     - `requirements.txt` - A file listing the package dependencies.
+    - `images` - A folder containing images for analysis.
 
-1. Open a terminal in VS Code and navigate to the project folder, then install the required libraries:
+1. In the **Explorer** pane, in the **python** folder, select the **.env** file to open it. Then update the endpoint value to match the endpoint for your Foundry resource.
 
-    ```
-    cd mslearn-ai-vision/labfiles/content-understanding/python
-    python -m venv labenv
-    ```
+    > **Important**:Be sure to add the `https://{YOUR-RESOURCE-NAME}.services.ai.azure.com` Foundry resource endpoint, <u>not</u> the project endpoint or Azure OpenAI endpoint!
 
-1. Activate the virtual environment:
+    Save the modified configuration file.
 
-    ```
-    labenv\Scripts\activate
-    ```
+1. In the **Explorer** pane, right-click the **python** folder containing the application files, and select **Open in integrated terminal** (or open a terminal in the **Terminal** menu and navigate to the */labfiles/content-understanding/python* folder.)
 
-1. Install the required packages:
+    > **Note**: Opening the terminal in Visual Studio Code will automatically activate the Python environment. You may need to enable running scripts on your system.
+
+1. Ensure that the terminal is open in the **/labfiles/content-understanding/python*** folder with the prefix **(.venv)** to indicate that the Python environment you created is active.
+1. Install the required Python packages by running the following command:
 
     ```
     pip install -r requirements.txt
     ```
-
-1. In VS Code, open the `.env` file and replace **{YOUR-RESOURCE-NAME}** with the name of your Foundry resource used for the content understanding (for example, `foundry-project-resource`).
-
-1. Save the `.env` file.
 
 ### Write code to analyze images and generate descriptions
 
