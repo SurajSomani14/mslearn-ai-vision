@@ -53,7 +53,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
     - **Region**: Select any available region
 
 1. Select **Create**. Wait for your project to be created.
-1. On the home page for your project, note the project endpoint, key, and OpenAI endpoint.
+1. On the home page for your project, note that the API key, project endpoint, and OpenAI endpoint are displayed here.
 
     > **TIP**: You're going to need the Azure OpenAI endpoint later!
 
@@ -61,7 +61,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
 You'll need a model that can process image-based input.
 
-1. On the project home page, in the **Start building** menu, select **Browse models** to view the Microsoft Foundry model catalog.
+1. On the home page, select **Find models** (or on the **Discover** page, select the **Models** tab) to view the Microsoft Foundry model catalog.
 
 1. Search for and deploy the `Sora-2` model using the default settings. Deployment may take a minute or so.
 
